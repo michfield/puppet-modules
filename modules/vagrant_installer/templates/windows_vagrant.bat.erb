@@ -6,6 +6,7 @@ REM Save some variables we're going to change so we can restore them later
 SET "VAGRANT_GEM_HOME_SAVED=%GEM_HOME%"
 SET "VAGRANT_GEM_PATH_SAVED=%GEM_PATH%"
 SET "VAGRANT_GEMRC_SAVED=%GEMRC%"
+SET "VAGRANT_PATH_SAVED=%PATH%"
 SET "VAGRANT_RUBYOPT_SAVED=%RUBYOPT%"
 
 REM Set environmental variables
@@ -34,6 +35,7 @@ REM Restore some environmental variables we changed
 SET "GEM_HOME=%VAGRANT_GEM_HOME_SAVED%"
 SET "GET_PATH=%VAGRANT_GEM_PATH_SAVED%"
 SET "GEMRC=%VAGRANT_GEMRC_SAVED%"
+SET "PATH=%VAGRANT_PATH_SAVED%"
 SET "RUBYOPT=%VAGRANT_RUBYOPT_SAVED"
 
 REM Exit with the proper exit status from Vagrant
