@@ -125,6 +125,17 @@ class vagrant_installer::staging::posix {
   }
 
   #------------------------------------------------------------------
+  # Optimize some disk space
+  #------------------------------------------------------------------
+
+  file { "${embedded_dir}/ssl/man":
+    ensure  => absent,
+    purge   => true,
+    recurse => true,
+    require => Class["openssl"],
+  }
+
+  #------------------------------------------------------------------
   # Other files
   #------------------------------------------------------------------
   $gemrc_path = "${embedded_dir}/etc/gemrc"
