@@ -6,7 +6,6 @@ class vagrant_installer::package::arch {
   require vagrant_installer::package::linux
 
   $file_cache_dir = hiera("file_cache_dir")
-  $arch_prefix = hiera("arch_prefix")
   $dist_dir      = $vagrant_installer::params::dist_dir
   $staging_dir    = $vagrant_installer::params::staging_dir
   $vagrant_version = $vagrant_installer::params::vagrant_version
