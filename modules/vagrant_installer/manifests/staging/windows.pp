@@ -8,10 +8,18 @@ class vagrant_installer::staging::windows {
   $vagrant_revision = $vagrant_installer::params::vagrant_revision
 
   #------------------------------------------------------------------
+  # Extra directories
+  #------------------------------------------------------------------
+  # For GnuForWin32 stuff
+  $gnuwin32_dir = "${embedded_dir}\\gnuwin32"
+  util::recursive_directory { $gnuwin32_dir: }
+
+  #------------------------------------------------------------------
   # Dependencies
   #------------------------------------------------------------------
   class { "bsdtar":
-    install_dir => $embedded_dir,
+    install_dir => $gnuwin32_dir,
+    require     => Util::Recursive_Directory[$gnuwin32_dir],
   }
 
   class { "ruby::windows":
