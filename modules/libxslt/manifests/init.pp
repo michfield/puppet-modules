@@ -66,7 +66,7 @@ class libxslt(
     $new_xslt_path = "@rpath/libxslt.1.dylib"
 
     exec { "libxslt-rpath":
-      command     => "install_name_tool -change ${old_xslt_path} ${new_xslt_path} ${xslt_path}",
+      command     => "install_name_tool -id ${new_xslt_path} ${xslt_path}",
       refreshonly => true,
       require     => Autotools["libxslt"],
       subscribe   => Exec["untar-libxslt"],
@@ -74,11 +74,11 @@ class libxslt(
 
     # EXSLT
     $exslt_path     = "${prefix}/lib/libexslt.dylib"
-    $old_exslt_path = "${prefix}/lib/libexslt.1.dylib"
-    $new_exslt_path = "@rpath/libexslt.1.dylib"
+    $old_exslt_path = "${prefix}/lib/libexslt.0.dylib"
+    $new_exslt_path = "@rpath/libexslt.0.dylib"
 
     exec { "libexslt-rpath":
-      command     => "install_name_tool -change ${old_exslt_path} ${new_exslt_path} ${exslt_path}",
+      command     => "install_name_tool -id ${new_exslt_path} ${exslt_path}",
       refreshonly => true,
       require     => Autotools["libxslt"],
       subscribe   => Exec["untar-libxslt"],
