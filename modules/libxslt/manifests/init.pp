@@ -55,4 +55,40 @@ class libxslt(
     make_sentinel    => "${source_dir_path}/libxslt/.libs/libxslt.dylib",
     require          => Exec["untar-libxslt"],
   }
+
+  #------------------------------------------------------------------
+  # Mac OS X lib name setup
+  #------------------------------------------------------------------
+  if $operatingsystem == 'Darwin' {
+    # XSLT
+    $xslt_path     = "${prefix}/lib/libxslt.dylib"
+    $old_xslt_path = "${prefix}/lib/libxslt.1.dylib"
+    $new_xslt_path = "@rpath/libxslt.1.dylib"
+
+    exec { "libxslt-rpath":
+      command     => "install_name_tool -change ${old_xslt_path} ${new_xslt_path} ${xslt_path}",
+      refreshonly => true,
+      require     => Autotools["libxslt"],
+      subscribe   => Exec["untar-libxslt"],
+    }
+
+    # EXSLT
+    $exslt_path     = "${prefix}/lib/libexslt.dylib"
+    $old_exslt_path = "${prefix}/lib/libexslt.1.dylib"
+    $new_exslt_path = "@rpath/libexslt.1.dylib"
+
+    exec { "libexslt-rpath":
+      command     => "install_name_tool -change ${old_exslt_path} ${new_exslt_path} ${exslt_path}",
+      refreshonly => true,
+      require     => Autotools["libxslt"],
+      subscribe   => Exec["untar-libxslt"],
+    }
+
+    exec { "libexslt-xslt-rpath":
+      command     => "install_name_tool -change ${old_xslt_path} ${new_xslt_path} ${exslt_path}",
+      refreshonly => true,
+      require     => Autotools["libxslt"],
+      subscribe   => Exec["untar-libxslt"],
+    }
+  }
 }
