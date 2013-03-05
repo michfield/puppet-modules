@@ -10,6 +10,10 @@ class vagrant_installer::staging::windows {
   #------------------------------------------------------------------
   # Dependencies
   #------------------------------------------------------------------
+  class { "bsdtar":
+    install_dir => $embedded_dir,
+  }
+
   class { "ruby::windows":
     install_dir => $embedded_dir,
   }
