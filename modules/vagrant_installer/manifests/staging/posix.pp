@@ -34,6 +34,10 @@ class vagrant_installer::staging::posix {
       "LDFLAGS" => "-Wl,-install_name,@rpath/libiconv.dylib",
     }
 
+    $libxml2_autotools_environment = {
+      "LDFLAGS" => "-Wl,-install_name,@rpath/libxml2.dylib",
+    }
+
     $libyaml_autotools_environment = {
       "LDFLAGS" => "-Wl,-install_name,@rpath/libyaml.dylib",
     }
@@ -72,6 +76,12 @@ class vagrant_installer::staging::posix {
   class { "libiconv":
     autotools_environment => autotools_merge_environments(
       $default_autotools_environment, $libiconv_autotools_environment),
+    prefix                => $embedded_dir,
+  }
+
+  class { "libxml2":
+    autotools_environment => autotools_merge_environments(
+      $default_autotools_environment, $libxml2_autotools_environment),
     prefix                => $embedded_dir,
   }
 
