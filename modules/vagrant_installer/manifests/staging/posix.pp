@@ -86,6 +86,12 @@ class vagrant_installer::staging::posix {
     require => Class["libiconv"],
   }
 
+  class { "libxslt":
+    autotools_environment => $default_autotools_environment,
+    prefix                => $embedded_dir,
+    require               => Class["libxml2"],
+  }
+
   class { "libyaml":
     autotools_environment => autotools_merge_environments(
       $default_autotools_environment, $libyaml_autotools_environment),
