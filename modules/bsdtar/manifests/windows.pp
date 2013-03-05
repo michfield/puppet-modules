@@ -2,7 +2,7 @@ class bsdtar::windows {
   $file_cache_dir        = $bsdtar::file_cache_dir
   $install_dir           = $bsdtar::install_dir
 
-  $source_file_path = "${file_cache_dir}/bsdtar.zip"
+  $source_file_path = "${file_cache_dir}\\bsdtar.zip"
 
   file { $source_file_path:
     source => "puppet:///modules/bsdtar/windows.zip",
