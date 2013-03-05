@@ -99,6 +99,7 @@ class vagrant_installer::package::windows {
   exec { "harvest-vagrant":
     command => "${wix_dir}\\heat.exe dir \"${staging_dir}\" ${harvest_flags}",
     creates => $wxs_files_path,
+    timeout => 0,
     require => [
       Class["wix"],
       Util::Recursive_directory[$pkg_staging_dir],
@@ -108,6 +109,7 @@ class vagrant_installer::package::windows {
   exec { "compile-vagrant":
     command => "${wix_dir}\\candle.exe ${candle_flags} ${wxs_files_path} ${wxs_path}",
     creates => $wixobj_files_path,
+    timeout => 0,
     require => [
       Class["wix"],
       Exec["harvest-vagrant"],
@@ -118,6 +120,7 @@ class vagrant_installer::package::windows {
     command => "${wix_dir}\\light.exe ${light_flags} ${wixobj_files_path} ${wixobj_main_path}",
     creates => $final_output_path,
     returns => [0, 204],
+    timeout => 0,
     require => [
       Class["wix"],
       Exec["compile-vagrant"],
