@@ -73,23 +73,25 @@ class vagrant_installer::staging::posix {
     make_notify           => Exec["reset-ruby"],
   }
 
-  class { "libiconv":
-    autotools_environment => autotools_merge_environments(
-      $default_autotools_environment, $libiconv_autotools_environment),
-    prefix                => $embedded_dir,
-  }
+  if $operatingsystem == "Ubuntu" or $operatingsystem == "Darwin" {
+    class { "libiconv":
+      autotools_environment => autotools_merge_environments(
+        $default_autotools_environment, $libiconv_autotools_environment),
+        prefix                => $embedded_dir,
+    }
 
-  class { "libxml2":
-    autotools_environment => autotools_merge_environments(
-      $default_autotools_environment, $libxml2_autotools_environment),
-    prefix  => $embedded_dir,
-    require => Class["libiconv"],
-  }
+    class { "libxml2":
+      autotools_environment => autotools_merge_environments(
+        $default_autotools_environment, $libxml2_autotools_environment),
+        prefix  => $embedded_dir,
+        require => Class["libiconv"],
+    }
 
-  class { "libxslt":
-    autotools_environment => $default_autotools_environment,
-    prefix                => $embedded_dir,
-    require               => Class["libxml2"],
+    class { "libxslt":
+      autotools_environment => $default_autotools_environment,
+      prefix                => $embedded_dir,
+      require               => Class["libxml2"],
+    }
   }
 
   class { "libyaml":
