@@ -40,6 +40,11 @@ fi
 export CFLAGS="${CFLAGS}-I${EMBEDDED_DIR}/include -L${EMBEDDED_DIR}/lib}"
 export LDFLAGS="${LDFLAGS}-I${EMBEDDED_DIR}/include -L${EMBEDDED_DIR}/lib}"
 
+# Determine the OS that we're on, which is used in some later checks.
+# It is very important we do this _before_ setting the PATH below
+# because uname dependencies can conflict on some platforms.
+OS=$(uname -o 2> /dev/null)
+
 # Prepend our embedded dir to the PATH so that we call that preferably
 export PATH="${EMBEDDED_DIR}/bin:${PATH}"
 
@@ -54,7 +59,6 @@ VAGRANT_EXECUTABLE="${EMBEDDED_DIR}/gems/bin/vagrant"
 # than a Cygwin path, which Ruby does not work with. We use `uname -o` to
 # determine whether we're in Cygwin. Since `uname -o` is not POSIX compliant
 # we're extra careful to handle error cases where it doesn't exist.
-OS=$(uname -o 2> /dev/null)
 if [ "${OS}" = "Cygwin" ]; then
 	VAGRANT_EXECUTABLE=`cygpath -w "${VAGRANT_EXECUTABLE}"`
 	GEM_HOME=`cygpath -w "${GEM_HOME}"`
