@@ -48,6 +48,12 @@ OS=$(uname -o 2> /dev/null)
 # Prepend our embedded dir to the PATH so that we call that preferably
 export PATH="${EMBEDDED_DIR}/bin:${PATH}"
 
+if [ "${OS}" = "Cygwin" ]; then
+	# In Cygwin, we want to add the Windows path to the PATH so that
+	# bsdtar and friends can be found
+	export PATH="${EMBEDDED_DIR}/gnuwin32/bin:${PATH}"
+fi
+
 # Unset any RUBYOPT, we don't want this bleeding into our runtime.
 unset RUBYOPT
 
