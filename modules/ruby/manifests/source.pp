@@ -55,4 +55,12 @@ class ruby::source(
     make_sentinel    => "${source_dir_path}/ruby",
     require          => Exec["untar-ruby"],
   }
+
+  if $operatingsystem == 'Darwin' {
+    file { "${embedded_dir}/include/ruby-1.9.1/x86_64-darwin12.2.1":
+      ensure  => link,
+      target  => "universal-darwin12.2.1",
+      require => Autotools["ruby"],
+    }
+  }
 }
