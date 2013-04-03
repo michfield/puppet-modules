@@ -25,6 +25,12 @@ class vagrant_installer::staging::posix {
     "MACOSX_DEPLOYMENT_TARGET" => "10.5",
   }
 
+  $default_curl_autotools_environment = {
+    "CPPFLAGS"                 => "-I${embedded_dir}/include",
+    "LDFLAGS"                  => "-L${embedded_dir}/lib ${extra_autotools_ldflags}",
+    "MACOSX_DEPLOYMENT_TARGET" => "10.5",
+  }
+
   if $operatingsystem == 'Darwin' {
     $libffi_autotools_environment = {
       "LDFLAGS" => "-Wl,-install_name,@rpath/libffi.dylib",
@@ -129,7 +135,7 @@ class vagrant_installer::staging::posix {
   }
 
   class { "curl":
-    autotools_environment => $default_autotools_environment,
+    autotools_environment => $default_curl_autotools_environment,
     install_dir           => $embedded_dir,
     require               => [
       Class["openssl"],
