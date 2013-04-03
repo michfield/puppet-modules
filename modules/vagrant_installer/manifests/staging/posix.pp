@@ -128,6 +128,15 @@ class vagrant_installer::staging::posix {
     require               => Class["zlib"],
   }
 
+  class { "curl":
+    autotools_environment => $default_autotools_environment,
+    install_dir           => $embedded_dir,
+    require               => [
+      Class["openssl"],
+      Class["zlib"],
+    ],
+  }
+
   class { "ruby::source":
     autotools_environment => autotools_merge_environments(
       $default_autotools_environment, $ruby_autotools_environment),
