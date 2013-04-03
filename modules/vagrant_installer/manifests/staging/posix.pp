@@ -32,6 +32,10 @@ class vagrant_installer::staging::posix {
   }
 
   if $operatingsystem == 'Darwin' {
+    $curl_autotools_environment = {
+      "LDFLAGS" => "-Wl,-rpath,@loader_path/../lib -Wl,-rpath,@executable_path/../lib",
+    }
+
     $libffi_autotools_environment = {
       "LDFLAGS" => "-Wl,-install_name,@rpath/libffi.dylib",
     }
@@ -61,6 +65,10 @@ class vagrant_installer::staging::posix {
     }
   } elsif $kernel == 'Linux' {
     $bsdtar_autotools_environment = {
+      "LD_RUN_PATH" => '$ORIGIN/../lib',
+    }
+
+    $curl_autotools_environment = {
       "LD_RUN_PATH" => '$ORIGIN/../lib',
     }
 
@@ -135,7 +143,8 @@ class vagrant_installer::staging::posix {
   }
 
   class { "curl":
-    autotools_environment => $default_curl_autotools_environment,
+    autotools_environment => autotools_merge_environments(
+      $default_curl_autotools_environment, $curl_autotools_environment),
     install_dir           => $embedded_dir,
     require               => [
       Class["openssl"],
