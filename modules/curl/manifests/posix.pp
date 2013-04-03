@@ -49,4 +49,35 @@ class curl::posix {
     make_sentinel      => "${source_dir_path}/src/.libs/curl",
     require            => Exec["untar-curl"],
   }
+
+  if $operatingsystem == 'Darwin' {
+    # On Mac OS X, we add a temporary rpath value so that the ./configure
+    # passes properly. In this step, we remove that temporary rpath value
+    # because we don't actually need it in the resulting binary.
+    exec { "remove-temp-curl-rpath":
+      command     => "install_name_tool -delete_rpath ${install_dir}/lib ${install_dir}/bin/curl",
+      refreshonly => true,
+      require     => Autotools["curl"],
+      subscribe   => Autotools["curl"],
+    }
+
+    $original_dylib = "${install_dir}/lib/libcurl.4.dylib"
+    $rpath_dylib    = "@rpath/libcurl.4.dylib"
+
+    # Now to flip a bunch of bits so that things point to the proper
+    # locations.
+    exec { "change-id-libcurl":
+      command     => "install_name_tool -id ${rpath_dylib} ${original_dylib}",
+      refreshonly => true,
+      require     => Autotools["curl"],
+      subscribe   => Autotools["curl"],
+    }
+
+    exec { "change-curl-libcurl-dep":
+      command     => "install_name_tool -change ${original_dylib} ${rpath_dylib} ${install_dir}/bin/curl",
+      refreshonly => true,
+      require     => Autotools["curl"],
+      subscribe   => Autotools["curl"],
+    }
+  }
 }
