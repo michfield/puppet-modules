@@ -9,6 +9,11 @@ class build_essential {
         command => "pacman --noconfirm --noprogressbar -Sy base-devel",
         unless  => "pacman -Qg base-devel",
       }
+
+      exec { "pacman-chrpath":
+        command => "pacman --noconfirm --noprogressbar -Sy chrpath",
+        unless  => "pacman -Qq chrpath",
+      }
     }
 
     'CentOS': {
@@ -34,7 +39,7 @@ class build_essential {
 
     'Ubuntu': {
       package {
-        ["build-essential", "autoconf", "automake", "libtool"]:
+        ["build-essential", "autoconf", "automake", "chrpath", "libtool"]:
           ensure => installed,
       }
     }

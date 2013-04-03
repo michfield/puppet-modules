@@ -80,4 +80,14 @@ class curl::posix {
       subscribe   => Autotools["curl"],
     }
   }
+
+  if $kernel == 'Linux' {
+    # We need to clean up the rpaths...
+    exec { "curl-rpath":
+      command => "chrpath -r '\${ORIGIN}/../lib' ${install_dir}/bin/curl",
+      refreshonly => true,
+      require     => Autotools["curl"],
+      subscribe   => Autotools["curl"],
+    }
+  }
 }
