@@ -45,6 +45,10 @@ export LDFLAGS="${LDFLAGS}-I${EMBEDDED_DIR}/include -L${EMBEDDED_DIR}/lib}"
 # because uname dependencies can conflict on some platforms.
 OS=$(uname -s 2>/dev/null)
 
+# Export the OS as an environmental variable that Vagrant can access
+# so that it can behave better.
+export VAGRANT_DETECTED_OS="${OS}"
+
 # Prepend our embedded dir to the PATH so that we call that preferably
 export PATH="${EMBEDDED_DIR}/bin:${PATH}"
 
