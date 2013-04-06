@@ -28,11 +28,11 @@ export VAGRANT_INSTALLER_EMBEDDED_DIR="${EMBEDDED_DIR}"
 # be able to link against our tools. First, append a space to any
 # previously set CFLAGS/LDFLAGS.
 if [ "${CFLAGS}x" != "x" ]; then
-	CFLAGS="$CFLAGS "
+  CFLAGS="$CFLAGS "
 fi
 
 if [ "${LDFLAGS}x" != "x" ]; then
-	LDFLAGS="$LDFLAGS "
+  LDFLAGS="$LDFLAGS "
 fi
 
 # Append our include/lib search path to the flags and make sure they're
@@ -48,23 +48,21 @@ OS=$(uname -s 2>/dev/null)
 # Prepend our embedded dir to the PATH so that we call that preferably
 export PATH="${EMBEDDED_DIR}/bin:${PATH}"
 
-# We use a case statement here because it is the most portable way
-# I could find to test for string inclusion using wildcards.
+# Unset any RUBYOPT, we don't want this bleeding into our runtime.
+unset RUBYOPT
+
+# Set the path to the Ruby executable
+RUBY_EXECUTABLE="${EMBEDDED_DIR}/bin/ruby"
+
+# Do some things depending on the OS that we're running on.
 case $OS in
-  Cygwin* | MINGW32*)
+	CYGWIN* | MINGW32*)
 		# In Linux-like environments on Windows, we want to add the
 		# Windows path to the PATH so that bsdtar and friends can
 		# be found.
 		export PATH="${EMBEDDED_DIR}/gnuwin32/bin:${PATH}"
-		;;
-esac
 
-# Unset any RUBYOPT, we don't want this bleeding into our runtime.
-unset RUBYOPT
-
-# Determine some paths here depending on the OS
-case $OS in
-	Cygwin* | MINGW32*)
+		# The Vagrant executable is at a different path on Windows
 		VAGRANT_EXECUTABLE="${EMBEDDED_DIR}/gems/bin/vagrant"
 		;;
 	*)
@@ -72,15 +70,17 @@ case $OS in
 		;;
 esac
 
-# If we're in Cygwin, we want to convert the path to a Windows path, rather
-# than a Cygwin path, which Ruby does not work with. We use `uname -o` to
-# determine whether we're in Cygwin. Since `uname -o` is not POSIX compliant
-# we're extra careful to handle error cases where it doesn't exist.
-if [ "${OS}" = "Cygwin" ]; then
-	VAGRANT_EXECUTABLE=`cygpath -w "${VAGRANT_EXECUTABLE}"`
-	GEM_HOME=`cygpath -w "${GEM_HOME}"`
-	GEM_PATH=`cygpath -w "${GEM_PATH}"`
-fi
+# Additional things to do that is OS-specific. We put this in a separate
+# case clause because we're matching specific OS's here.
+case $OS in
+	CYGWIN*)
+		# If we're in Cygwin, we want to convert the path to a Windows path, rather
+		# than a Cygwin path, which Ruby does not work with.
+		VAGRANT_EXECUTABLE=`cygpath -w "${VAGRANT_EXECUTABLE}"`
+		GEM_HOME=`cygpath -w "${GEM_HOME}"`
+		GEM_PATH=`cygpath -w "${GEM_PATH}"`
+		;;
+esac
 
 # Call the actual Vagrant bin with our arguments
-"${EMBEDDED_DIR}/bin/ruby" "${VAGRANT_EXECUTABLE}" "$@"
+"${RUBY_EXECUTABLE}" "${VAGRANT_EXECUTABLE}" "$@"
