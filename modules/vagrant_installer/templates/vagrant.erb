@@ -43,23 +43,34 @@ export LDFLAGS="${LDFLAGS}-I${EMBEDDED_DIR}/include -L${EMBEDDED_DIR}/lib}"
 # Determine the OS that we're on, which is used in some later checks.
 # It is very important we do this _before_ setting the PATH below
 # because uname dependencies can conflict on some platforms.
-OS=$(uname -o 2> /dev/null)
+OS=$(uname -s 2>/dev/null)
 
 # Prepend our embedded dir to the PATH so that we call that preferably
 export PATH="${EMBEDDED_DIR}/bin:${PATH}"
 
-if [ "${OS}" = "Cygwin" -o "${OS}" = "MINGW32" ]; then
-	# In Linux-like environments on Windows, we want to add the Windows
-	# path to the PATH so that bsdtar and friends can be found.
-	export PATH="${EMBEDDED_DIR}/gnuwin32/bin:${PATH}"
-fi
+# We use a case statement here because it is the most portable way
+# I could find to test for string inclusion using wildcards.
+case $OS in
+  Cygwin* | MINGW32*)
+		# In Linux-like environments on Windows, we want to add the
+		# Windows path to the PATH so that bsdtar and friends can
+		# be found.
+		export PATH="${EMBEDDED_DIR}/gnuwin32/bin:${PATH}"
+		;;
+esac
 
 # Unset any RUBYOPT, we don't want this bleeding into our runtime.
 unset RUBYOPT
 
-# The path to the Vagrant executable
-<% if @operatingsystem == "windows" -%>
-VAGRANT_EXECUTABLE="${EMBEDDED_DIR}/gems/bin/vagrant"
+# Determine some paths here depending on the OS
+case $OS in
+	Cygwin* | MINGW32*)
+		VAGRANT_EXECUTABLE="${EMBEDDED_DIR}/gems/bin/vagrant"
+		;;
+	*)
+		VAGRANT_EXECUTABLE=${GEM_PATH}/bin/vagrant
+		;;
+esac
 
 # If we're in Cygwin, we want to convert the path to a Windows path, rather
 # than a Cygwin path, which Ruby does not work with. We use `uname -o` to
@@ -70,9 +81,6 @@ if [ "${OS}" = "Cygwin" ]; then
 	GEM_HOME=`cygpath -w "${GEM_HOME}"`
 	GEM_PATH=`cygpath -w "${GEM_PATH}"`
 fi
-<% else -%>
-VAGRANT_EXECUTABLE=${GEM_PATH}/bin/vagrant
-<% end -%>
 
 # Call the actual Vagrant bin with our arguments
 "${EMBEDDED_DIR}/bin/ruby" "${VAGRANT_EXECUTABLE}" "$@"
