@@ -10,7 +10,7 @@ class vagrant_installer::package::windows {
   $vagrant_version = $vagrant_installer::params::vagrant_version
   $wix_dir         = "${file_cache_dir}\\wix-binaries"
 
-  $final_output_path = "${dist_dir}/Vagrant.msi"
+  $final_output_path = "${dist_dir}/Vagrant_${vagrant_version}.msi"
 
   $files_component_group = "VagrantDir"
   $pkg_staging_dir = "${file_cache_dir}\\pkg-staging"

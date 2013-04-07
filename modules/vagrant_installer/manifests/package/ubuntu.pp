@@ -11,7 +11,7 @@ class vagrant_installer::package::ubuntu {
   $staging_dir     = $vagrant_installer::params::staging_dir
   $vagrant_version = $vagrant_installer::params::vagrant_version
 
-  $final_output_path = "${dist_dir}/vagrant_${hardwaremodel}.deb"
+  $final_output_path = "${dist_dir}/vagrant_${vagrant_version}_${hardwaremodel}.deb"
 
   $fpm_args = "-p '${final_output_path}' -n vagrant -v '${vagrant_version}' -s dir -t deb --prefix '/' --maintainer '${deb_maintainer}' --deb-user root --deb-group root"
 

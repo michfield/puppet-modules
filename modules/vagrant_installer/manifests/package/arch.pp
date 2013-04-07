@@ -15,7 +15,7 @@ class vagrant_installer::package::arch {
   $setup_dir = "${file_cache_dir}/arch_setup"
   $source_package = "vagrant.tar.gz"
 
-  $final_output_path = "${dist_dir}/vagrant_${hardwaremodel}.pkg.tar.xz"
+  $final_output_path = "${dist_dir}/vagrant_${vagrant_version}_${hardwaremodel}.pkg.tar.xz"
   $script_renamer = "${file_cache_dir}/arch_renamer"
 
   #------------------------------------------------------------------

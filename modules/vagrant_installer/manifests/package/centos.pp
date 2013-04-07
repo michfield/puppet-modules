@@ -10,7 +10,7 @@ class vagrant_installer::package::centos {
   $staging_dir     = $vagrant_installer::params::staging_dir
   $vagrant_version = $vagrant_installer::params::vagrant_version
 
-  $final_output_path = "${dist_dir}/vagrant_${hardwaremodel}.rpm"
+  $final_output_path = "${dist_dir}/vagrant_${vagrant_version}_${hardwaremodel}.rpm"
 
   $fpm_args = "-p '${final_output_path}' -n vagrant -v '${vagrant_version}' -s dir -t rpm --prefix '/' -C '${staging_dir}'"
 

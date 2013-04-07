@@ -17,7 +17,7 @@ class vagrant_installer::package::darwin {
   $staging_dir          = $vagrant_installer::params::staging_dir
   $vagrant_version      = $vagrant_installer::params::vagrant_version
 
-  $final_output_path    = "${dist_dir}/Vagrant.dmg"
+  $final_output_path    = "${dist_dir}/Vagrant-${vagrant_version}.dmg"
 
   $pkgbuild_options = "--root ${staging_dir} --identifier com.vagrant.vagrant --version ${vagrant_version} --install-location ${install_location} --scripts ${pkg_scripts_dir} --sign '${pkg_sign_name}' --timestamp=none"
 
