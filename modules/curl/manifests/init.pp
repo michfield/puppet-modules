@@ -9,6 +9,7 @@ class curl(
 ) {
   case $kernel {
     'Darwin', 'Linux': { include curl::posix }
+    'windows':         { include curl::windows }
     default: { fail("Unknown OS to install cURL") }
   }
 }
