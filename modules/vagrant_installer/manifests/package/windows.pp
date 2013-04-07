@@ -93,7 +93,7 @@ class vagrant_installer::package::windows {
   $wxs_files_path = "${pkg_staging_dir}\\vagrant-files.wxs"
 
   $candle_flags = "-nologo -I${pkg_staging_dir} -dVagrantSourceDir=\"${staging_dir}\" -out ${pkg_staging_dir}\\"
-  $harvest_flags = "-nologo -srd -gg -cg ${files_component_group} -dr VAGRANTLOCATION -var var.VagrantSourceDir -out ${wxs_files_path}"
+  $harvest_flags = "-nologo -srd -gg -cg ${files_component_group} -dr VAGRANTAPPDIR -var var.VagrantSourceDir -out ${wxs_files_path}"
   $light_flags = "-nologo -ext WixUIExtension -cultures:en-us -loc ${wxl_path} -out ${final_output_path}"
 
   exec { "harvest-vagrant":
