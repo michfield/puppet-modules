@@ -11,6 +11,9 @@
            Manufacturer="!(loc.ManufacturerName)"
            UpgradeCode="$(var.UpgradeCode)">
 
+    <!-- Disallow installing older versions until the new version is removed -->
+    <MajorUpgrade DowngradeErrorMessage="A later version of Vagrant is installed. Please remove this version first. Setup will now exit." />
+
     <!-- Define the package information -->
     <Package Compressed="yes"
              InstallerVersion="200"
@@ -29,11 +32,17 @@
        <![CDATA[Installed or (VersionNT >= 500)]]>
      </Condition>
 
+     <!-- Some steps for our installation -->
+     <InstallExecuteSequence>
+       <RemoveExistingProducts Before="InstallInitialize" />
+       <ScheduleReboot After="InstallFinalize" />
+     </InstallExecuteSequence>
+
      <!-- The directory where we'll install Vagrant -->
      <Directory Id="TARGETDIR" Name="SourceDir">
-       <Directory Id="WindowsVolume">
-         <Directory Id="INSTALLDIR" Name="vagrant">
-           <Directory Id="VAGRANTLOCATION" Name="vagrant">
+       <Directory Id="ProgramFilesFolder">
+         <Directory Id="MANUFACTURERDIR" Name="HashiCorp">
+           <Directory Id="VAGRANTAPPDIR" Name="Vagrant">
              <Component Id="VagrantBin"
                         Guid="{12a01bfc-ae9e-4543-8a32-47865cc03071}">
                <!--
@@ -45,7 +54,7 @@
                             Action="set"
                             Part="last"
                             System="yes"
-                            Value="[VAGRANTLOCATION]bin" />
+                            Value="[VAGRANTAPPDIR]bin" />
              </Component>
            </Directory>
          </Directory>
@@ -61,7 +70,7 @@
      </Feature>
 
      <!-- WixUI configuration so we can have a UI -->
-     <Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
+     <Property Id="WIXUI_INSTALLDIR" Value="VAGRANTAPPDIR" />
 
      <UIRef Id="VagrantUI_InstallDir" />
      <UI Id="VagrantUI_InstallDir">
