@@ -19,7 +19,9 @@
              Manufacturer="!(loc.ManufacturerName)" />
 
     <!-- Disallow installing older versions until the new version is removed -->
-    <MajorUpgrade DowngradeErrorMessage="A later version of Vagrant is installed. Please remove this version first. Setup will now exit." />
+    <!-- Note that this creates the RemoveExistingProducts action -->
+    <MajorUpgrade DowngradeErrorMessage="A later version of Vagrant is installed. Please remove this version first. Setup will now exit."
+                  Schedule="afterInstallInitialize" />
 
     <!-- The source media for the installer -->
     <Media Id="1"
@@ -34,7 +36,6 @@
 
      <!-- Some steps for our installation -->
      <InstallExecuteSequence>
-       <RemoveExistingProducts Before="InstallInitialize" />
        <ScheduleReboot After="InstallFinalize" />
      </InstallExecuteSequence>
 
