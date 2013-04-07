@@ -11,15 +11,15 @@
            Manufacturer="!(loc.ManufacturerName)"
            UpgradeCode="$(var.UpgradeCode)">
 
-    <!-- Disallow installing older versions until the new version is removed -->
-    <MajorUpgrade DowngradeErrorMessage="A later version of Vagrant is installed. Please remove this version first. Setup will now exit." />
-
     <!-- Define the package information -->
     <Package Compressed="yes"
              InstallerVersion="200"
              InstallPrivileges="elevated"
              InstallScope="perMachine"
              Manufacturer="!(loc.ManufacturerName)" />
+
+    <!-- Disallow installing older versions until the new version is removed -->
+    <MajorUpgrade DowngradeErrorMessage="A later version of Vagrant is installed. Please remove this version first. Setup will now exit." />
 
     <!-- The source media for the installer -->
     <Media Id="1"
