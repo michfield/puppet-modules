@@ -22,6 +22,10 @@ class vagrant_installer::staging::windows {
     require     => Util::Recursive_Directory[$gnuwin32_dir],
   }
 
+  class { "curl":
+    install_dir => "${embedded_dir}\\bin",
+  }
+
   class { "ruby::windows":
     install_dir => $embedded_dir,
   }
