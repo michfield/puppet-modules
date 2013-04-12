@@ -80,9 +80,10 @@ case $OS in
 	CYGWIN*)
 		# If we're in Cygwin, we want to convert the path to a Windows path, rather
 		# than a Cygwin path, which Ruby does not work with.
-		VAGRANT_EXECUTABLE=`cygpath -w "${VAGRANT_EXECUTABLE}"`
-		GEM_HOME=`cygpath -w "${GEM_HOME}"`
-		GEM_PATH=`cygpath -w "${GEM_PATH}"`
+		VAGRANT_EXECUTABLE=`cygpath -wla "${VAGRANT_EXECUTABLE}"`
+		VAGRANT_INSTALLER_EMBEDDED_DIR=`cygpath -wla "${EMBEDDED_DIR}"`
+		GEM_HOME=`cygpath -wla "${GEM_HOME}"`
+		GEM_PATH=`cygpath -wla "${GEM_PATH}"`
 		;;
 esac
 
