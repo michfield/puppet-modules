@@ -18,7 +18,9 @@ class curl::posix {
       "LDFLAGS" => "-Wl,-rpath,${install_dir}/lib",
     }
   } else {
-    $extra_autotools_environment = {}
+    $extra_autotools_environment = {
+      "LD_RUN_PATH" => "${install_dir}/lib",
+    }
   }
 
   # Merge our environments.
