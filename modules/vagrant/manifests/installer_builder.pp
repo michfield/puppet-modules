@@ -73,6 +73,7 @@ class vagrant::installer_builder(
   exec { "rsync-vagrant-installer-builder":
     command     => "rsync --archive --delete ${source_dir_path}/ ${install_dir}/",
     refreshonly => true,
+    timeout     => 0,
     require     => Exec["vagrant-installer-modules"],
   }
 }
