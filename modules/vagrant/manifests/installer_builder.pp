@@ -54,6 +54,7 @@ class vagrant::installer_builder(
     creates     => "${source_dir_path}/modules",
     cwd         => $source_dir_path,
     environment => "HOME=${source_dir_path}",
+    timeout     => 0,
     require     => [
       Package["librarian-puppet"],
       Exec["untar-vagrant-installer-builder"],
