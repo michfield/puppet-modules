@@ -68,10 +68,6 @@ class vagrant_installer::staging::posix {
       "LD_RUN_PATH" => '$ORIGIN/../lib',
     }
 
-    $curl_autotools_environment = {
-      "LD_RUN_PATH" => '$ORIGIN/../lib',
-    }
-
     $ruby_autotools_environment = {
       "LD_RUN_PATH" => '\$ORIGIN/../lib',
     }
