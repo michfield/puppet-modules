@@ -194,6 +194,11 @@ class vagrant_installer::staging::posix {
     mode    => "0644",
   }
 
+  file { "${embedded_dir}/cacert.pem":
+    source => "puppet:///modules/vagrant_installer/cacert.pem",
+    mode   => "0644",
+  }
+
   #------------------------------------------------------------------
   # Bin wrappers
   #------------------------------------------------------------------

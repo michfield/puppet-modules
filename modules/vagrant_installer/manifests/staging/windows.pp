@@ -41,6 +41,14 @@ class vagrant_installer::staging::windows {
   }
 
   #------------------------------------------------------------------
+  # Other Files
+  #------------------------------------------------------------------
+
+  file { "${embedded_dir}/cacert.pem":
+    source => "puppet:///modules/vagrant_installer/cacert.pem",
+  }
+
+  #------------------------------------------------------------------
   # Bin wrappers
   #------------------------------------------------------------------
   # Batch wrapper so that Vagrant can be executed from normal cmd.exe
